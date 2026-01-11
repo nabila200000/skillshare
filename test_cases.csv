@@ -1,0 +1,135 @@
+"Test Sequence ID","Test Description","Test Case ID","Test Case Description","Test Steps",Pre-condition,"Test Data",Post-condition,"Expected Result","Actual Result",Status,Remarks
+1,"User Registration with Valid Data",TC_REG_001,"Valid Email and Password Registration","1. Navigate to registration page
+2. Enter Name: John Doe
+3. Enter Email: john@example.com
+4. Enter Password: SecurePass123
+5. Click Register button","User is not logged in, email is unique","Name: John Doe;Email: john@example.com;Password: SecurePass123","User is registered in database, session is not started yet","Success message: Registration successful displayed, user can login",PASS,PASS,"Test passed successfully"
+2,"User Registration with Duplicate Email",TC_REG_002,"Duplicate Email Registration Error","1. Register first user with email: test@example.com
+2. Attempt to register second user with same email
+3. Submit form","First user with test@example.com exists","Email: test@example.com (duplicate)","Registration attempt fails, user not added to database","Error message: Email already registered displayed",PASS,PASS,"Test passed successfully"
+3,"User Registration with Empty Fields",TC_REG_003,"Registration with Missing Required Fields","1. Navigate to registration page
+2. Leave Name field empty
+3. Enter Email: user@example.com
+4. Enter Password: Pass123
+5. Submit form","User is not logged in","Name: empty;Email: user@example.com;Password: Pass123","Form validation occurs, no database insert","Form validation error for required Name field",PASS,PASS,"Test passed successfully"
+4,"User Login with Valid Credentials",TC_LOGIN_001,"Login with Correct Email and Password","1. Navigate to login page
+2. Enter Email: john@example.com
+3. Enter Password: SecurePass123
+4. Click Login button","User is registered with email john@example.com, password hash stored","Email: john@example.com;Password: SecurePass123","Session user_id is set, user is redirected","User redirected to dashboard, $_SESSION['user_id'] is set",PASS,PASS,"Test passed successfully"
+5,"User Login with Invalid Email",TC_LOGIN_002,"Login with Non-existent Email","1. Navigate to login page
+2. Enter Email: nonexistent@example.com
+3. Enter Password: AnyPassword123
+4. Click Login button","Email does not exist in database","Email: nonexistent@example.com;Password: AnyPassword123","Login fails, session not created","Error message: Invalid email or password displayed",PASS,PASS,"Test passed successfully"
+6,"User Login with Wrong Password",TC_LOGIN_003,"Login with Correct Email but Wrong Password","1. Navigate to login page
+2. Enter Email: john@example.com
+3. Enter Password: WrongPassword456
+4. Click Login button","User is registered with email john@example.com","Email: john@example.com;Password: WrongPassword456","Login fails, session not created","Error message: Invalid email or password displayed",PASS,PASS,"Test passed successfully"
+7,"User Login with Empty Email",TC_LOGIN_004,"Login with Empty Email Field","1. Navigate to login page
+2. Leave Email field empty
+3. Enter Password: SecurePass123
+4. Click Login button","User is not logged in","Email: empty;Password: SecurePass123","Login validation fails, no database query","Form validation error for Email field",PASS,PASS,"Test passed successfully"
+8,"User Login with Empty Password",TC_LOGIN_005,"Login with Empty Password Field","1. Navigate to login page
+2. Enter Email: john@example.com
+3. Leave Password field empty
+4. Click Login button","User is not logged in","Email: john@example.com;Password: empty","Login validation fails, no database query","Form validation error for Password field",PASS,PASS,"Test passed successfully"
+9,"Already Logged In User Redirect",TC_LOGIN_006,"Login Page Redirect for Authenticated User","1. User is logged in with active session
+2. Navigate to login.php","User has valid $_SESSION['user_id'] set","Session: user_id=5; user_name=John Doe","User is redirected to dashboard","Redirect to dashboard.php occurs, login page not shown",PASS,PASS,"Test passed successfully"
+10,"User Logout Functionality",TC_LOGOUT_001,"User Session Destruction on Logout","1. User is logged in
+2. Click Logout button
+3. Navigate to protected page","User has active session with user_id","Session: user_id=5","Session is destroyed","Session cleared, redirect to login.php, protected pages not accessible",PASS,PASS,"Test passed successfully"
+11,"Send Chat Message with Valid Data",TC_CHAT_001,"Send Message in Accepted Request","1. Login as requester user
+2. Navigate to chat page with accepted request
+3. Enter message: Hello instructor
+4. Click Send button","User logged in, request status is accepted, access verified","Request ID: 1; Message: Hello instructor","Message inserted in database, is_read=0","Message sent successfully and appears in chat window",PASS,PASS,"Test passed successfully"
+12,"Send Empty Chat Message",TC_CHAT_002,"Send Empty Message Validation","1. Login as user
+2. Navigate to chat page
+3. Leave message field empty
+4. Click Send button","User logged in, request is accepted","Message: empty/whitespace","Empty message is not inserted, no database change","Empty message rejected, no database insert occurs",PASS,PASS,"Test passed successfully"
+13,"Chat Access Control - Unauthorized User",TC_CHAT_003,"Unauthorized User Chat Access","1. Login as user_id=10 (not involved in request)
+2. Attempt to access chat for request_id=5 (belongs to user_id=1 and 2)
+3. Verify access","User_id=10 is not requester or skill owner of request_id=5",user_id=10;request_id=5,"Access check fails, die() executes","Access denied message displayed, page not rendered",PASS,PASS,"Test passed successfully"
+14,"Chat Mark Messages as Read",TC_CHAT_004,"Incoming Messages Marked as Read","1. Login as skill_owner user_id=1
+2. Requester user_id=2 sends message
+3. Skill owner accesses chat page
+4. Verify message is_read status","Message from user_id=2 exists with is_read=0 for request involving user_id=1",request_id=1;user_id=1,"UPDATE query executes, is_read=1 for incoming messages","Incoming messages marked as read, Unread badge removed",PASS,PASS,"Test passed successfully"
+15,"Chat Fetch Messages Order",TC_CHAT_005,"Messages Display in Chronological Order","1. Login and navigate to chat
+2. Send 3 messages with timestamps
+3. Verify display order","Request has 3 messages with different timestamps","Message order: msg1 (10:00)"," msg2 (10:05)"," msg3 (10:10)",PASS,PASS,"Test passed successfully"
+16,"Chat Unread Indicator Display",TC_CHAT_006,"Unread Badge Shows for New Messages","1. Login as recipient
+2. Other user sends message (is_read=0)
+3. Navigate to chat, verify badge presence","Message in database with is_read=0 from different sender",sender_id=2;recipient_id=1;is_read=0,"Badge rendered in message display","Unread badge (yellow) displays for unread messages",PASS,PASS,"Test passed successfully"
+17,"Send Skill Request with Valid Data",TC_REQ_001,"Create New Skill Request","1. Login as requester user
+2. Navigate to skills list
+3. Click Request on a skill (skill_id=3)
+4. Verify redirect","User is logged in, skill_id=3 exists",skill_id=3;requester_id=5,"INSERT query executes, request created with status=pending","Request created in database, user redirected to skills list",PASS,PASS,"Test passed successfully"
+18,"Send Request Unauthorized Access",TC_REQ_002,"Unauthorized User Request Creation","1. User is NOT logged in
+2. Attempt to send request via GET: ?skill_id=3
+3. Verify redirect","No active session","No $_SESSION['user_id']","Redirect before database operation","User redirected to login.php",PASS,PASS,"Test passed successfully"
+19,"Request Access Denied - Not Involved",TC_REQ_003,"Access Denied for Non-Involved User","1. Login as user_id=10
+2. Attempt to view request_id=5 (belongs to user_id=1,2)
+3. Verify access check","Request_id=5 has requester_id=1, skill belongs to user_id=2",user_id=10;request_id=5,"Access check query returns 0 rows, die() executes","Access denied message, page does not load",PASS,PASS,"Test passed successfully"
+20,"Request Access Granted - Requester",TC_REQ_004,"Access Allowed for Request Requester","1. Login as user_id=5 (requester of request_id=7)
+2. Navigate to request chat
+3. Verify access granted and request data loads","Request_id=7 has requester_id=5, status=accepted",user_id=5;request_id=7,"Access check returns 1+ rows, request data fetched","Request data loads, chat displayed for requester",PASS,PASS,"Test passed successfully"
+21,"Request Access Granted - Skill Owner",TC_REQ_005,"Access Allowed for Skill Owner","1. Login as user_id=3 (owns skill in request_id=7)
+2. Navigate to request chat
+3. Verify access granted","Request_id=7 involves skill owned by user_id=3, status=accepted",user_id=3;request_id=7,"Access check returns 1+ rows, request data fetched","Request data loads, chat displayed for skill owner","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+22,"SQL Injection in Email Field",TC_SEC_001,"SQL Injection Prevention in Login","1. Navigate to login page
+2. Enter Email: admin@example.com' OR '1'='1
+3. Enter valid Password
+4. Click Login","Database has user admin@example.com with secure password","Email: admin@example.com' OR '1'='1;Password: SecurePass","SQL injection attempt is handled, no authentication bypass","Login fails with invalid credentials, no database compromise","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+23,"SQL Injection in Chat Message",TC_SEC_002,"SQL Injection Prevention in Chat Messages","1. Login and navigate to chat
+2. Send message: ',(0), DROP TABLE users--
+3. Verify database integrity","User logged in, request accepted","Message: '","(0) DROP TABLE users--","Message stored with special chars escaped in database","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+24,"XSS Prevention in Chat Display",TC_SEC_003,"XSS Script Prevention in Message Display","1. Login and navigate to chat
+2. Send message: <script>alert('XSS')</script>
+3. View message in browser","User logged in","Message: <script>alert('XSS')</script>","htmlspecialchars() applied to message output","Script tags displayed as text, no execution, safe display","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+25,"XSS Prevention in User Name Display",TC_SEC_004,"XSS Prevention in Username Display","1. User registers with name: <img src=x onerror=alert(1)>
+2. Login
+3. Navigate to chat
+4. Verify name display safe","User with malicious name exists","Name: <img src=x onerror=alert(1)>","htmlspecialchars() applied to username output","Malicious HTML displayed as text, no execution","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+26,"Authentication Session Persistence",TC_SEC_005,"Session Persistence Check","1. Login as user
+2. Send request with $_SESSION['user_id'] set
+3. Verify session remains active across requests","User is logged in","Session duration: 30 minutes","Session timeout not reached, session active","Session variable accessible, user remains authenticated","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+27,"Missing Session Check - Chat",TC_SEC_006,"Unauthorized Chat Access Without Session","1. Do not login (no session)
+2. Attempt to access chat.php directly
+3. Verify redirect","No active $_SESSION['user_id']","No $_SESSION set","session_start() executes, redirect logic checks auth","Redirect to login.php, chat page not accessible","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+28,"Database Connection Failure",TC_DB_001,"Database Connection Error Handling","1. Stop database server
+2. Attempt to login
+3. Verify error message","Database server is unavailable","Connection: localhost"," invalid port","mysqli_connect() fails, error message displays","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+29,"Database Query Error Handling",TC_DB_002,"Invalid SQL Query Error","1. Execute malformed SQL (syntax error)
+2. Verify error handling","Database connection active","Query: SELECT * FORM users (typo)","Query fails, mysqli_query returns false","Error captured, no page crash, graceful error handling","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+30,"User Registration Email Validation",TC_VAL_001,"Email Format Validation","1. Register with invalid email: notanemail
+2. Enter Name: John
+3. Enter Password: Pass123
+4. Submit form","User not logged in","Email: notanemail;Name: John;Password: Pass123","HTML5 email validation prevents submission","Form validation error, submission blocked","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+31,"Password Strength Validation",TC_VAL_002,"Minimum Password Requirements","1. Register with weak password: abc
+2. Enter Name: John
+3. Enter Email: john@test.com
+4. Submit form","User not logged in","Email: john@test.com;Name: John;Password: abc","Consider password strength validation (if implemented)","Weak password handling (or accepted if no requirement)","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+32,"Name Field Whitespace Trimming",TC_VAL_003,"Input Trimming on Registration","1. Register with name: '  John Doe  '
+2. Verify stored value","User not logged in","Name: '  John Doe  '","trim() applied, extra spaces removed before insert","User stored with name: 'John Doe' (no extra spaces)","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+33,"Email Case Sensitivity Check",TC_VAL_004,"Email Case Handling in Login","1. Register with: John@Example.com
+2. Login with: john@example.com
+3. Verify login success","User registered with John@Example.com","Email: john@example.com (lowercase case)","Email comparison (database dependent, case-insensitive in MySQL)","Login successful if database email case-insensitive","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+34,"Concurrent Message Sending",TC_PERF_001,"Multiple Rapid Messages","1. Login user_id=1
+2. Send 5 messages rapidly
+3. Verify all messages in database","User logged in, request accepted","5 messages in sequence","All 5 INSERT queries execute, all messages stored","All 5 messages appear in chat window in order","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+35,"Large Message Text Handling",TC_PERF_002,"Large Text Message Storage","1. Login to chat
+2. Send message with 5000 characters
+3. Verify storage and display","User logged in, request accepted","Message: 5000 char text","INSERT succeeds, message stored fully","Large message stored and displayed without truncation","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+36,"Request Status Verification",TC_REQ_006,"Only Access Accepted Requests","1. Create pending request (status=pending)
+2. Login as requester
+3. Attempt to access chat
+4. Verify access denied","Request with status=pending exists",request_id=10;status=pending,"Access check WHERE requests.status='accepted' fails","Access denied for pending requests","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+37,"Database Transaction Rollback",TC_DB_003,"Message Insert Error Handling","1. Send chat message with database constraint violation
+2. Verify message not stored","Valid request and user setup","Invalid request_id in message","INSERT fails due to foreign key, no partial data","Message not stored, database in consistent state","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+38,"Password Hash Verification",TC_SEC_007,"Secure Password Storage Check","1. Register user with password: SecurePass123
+2. Query database directly
+3. Verify password is hashed, not plaintext","User registration successful","Password: SecurePass123","password_hash() applied with PASSWORD_DEFAULT","Password stored as bcrypt hash, not plaintext","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+39,"Session User ID Validation",TC_SEC_008,"User ID Session Integrity","1. Set $_SESSION['user_id']=999 (non-existent)
+2. Attempt to send message
+3. Verify validation","Session user_id=999 set, user doesn't exist",user_id=999,"Database query may fail or create orphaned record","Error or graceful handling for non-existent user","NOT RUN",PENDING,"No corresponding PHPUnit test found"
+39,"Session User ID Validation",TC_SEC_008,"User ID Session Integrity","1. Set $_SESSION['user_id']=999 (non-existent)
+2. Attempt to send message
+3. Verify validation","Session user_id=999 set, user doesn't exist",user_id=999,"Database query may fail or create orphaned record","Error or graceful handling for non-existent user","NOT RUN",PENDING,"No corresponding PHPUnit test found"

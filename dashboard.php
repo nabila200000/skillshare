@@ -10,88 +10,113 @@ include('includes/header.php');
 include('includes/navbar.php');
 ?>
 
+<style>
+.dashboard-hero {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: #fff;
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 40px;
+}
+
+.dashboard-card {
+    transition: all 0.3s ease;
+    border-radius: 16px;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+.dashboard-icon {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+</style>
+
 <div class="container mt-4">
 
-    <!-- Dashboard Header -->
-    <div class="mb-4 text-center">
-        <h2 class="fw-bold">
+    <!-- HERO SECTION -->
+    <div class="dashboard-hero text-center shadow">
+        <h2 class="fw-bold mb-2">
             Welcome, <?php echo htmlspecialchars($_SESSION['user_name']); ?> 👋
         </h2>
-        <p class="text-muted">
-            Manage your skills, requests, and learning journey!
+        <p class="mb-0 opacity-75">
+            Manage your skills, learning requests, and conversations from one place
         </p>
     </div>
 
-    <!-- Dashboard Cards -->
+    <!-- DASHBOARD CARDS -->
     <div class="row g-4">
 
-        <!-- Add Skill -->
+        <!-- ADD SKILL -->
         <div class="col-md-3">
-            <div class="card h-100 shadow-sm text-center border-0">
+            <div class="card dashboard-card h-100 text-center border-0">
                 <div class="card-body">
-                    <div class="mb-3 text-primary fs-1">
+                    <div class="dashboard-icon text-primary">
                         <i class="bi bi-plus-circle"></i>
                     </div>
-                    <h5 class="card-title">Add Skill</h5>
-                    <p class="card-text text-muted">
-                        Share a new skill you want to teach
+                    <h5 class="fw-semibold">Add Skill</h5>
+                    <p class="text-muted small">
+                        Share a new skill you want to teach others
                     </p>
-                    <a href="skills/add.php" class="btn btn-primary btn-sm">
-                        Go
+                    <a href="skills/add.php" class="btn btn-primary btn-sm px-4">
+                        Add Skill
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- View Skills -->
+        <!-- VIEW SKILLS -->
         <div class="col-md-3">
-            <div class="card h-100 shadow-sm text-center border-0">
+            <div class="card dashboard-card h-100 text-center border-0">
                 <div class="card-body">
-                    <div class="mb-3 text-success fs-1">
+                    <div class="dashboard-icon text-success">
                         <i class="bi bi-list-check"></i>
                     </div>
-                    <h5 class="card-title">View Skills</h5>
-                    <p class="card-text text-muted">
-                        Browse skills shared by others
+                    <h5 class="fw-semibold">Explore Skills</h5>
+                    <p class="text-muted small">
+                        Browse skills shared by other users
                     </p>
-                    <a href="skills/list.php" class="btn btn-success btn-sm">
-                        Go
+                    <a href="skills/list.php" class="btn btn-success btn-sm px-4">
+                        View Skills
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- Manage Requests -->
+        <!-- MANAGE REQUESTS -->
         <div class="col-md-3">
-            <div class="card h-100 shadow-sm text-center border-0">
+            <div class="card dashboard-card h-100 text-center border-0">
                 <div class="card-body">
-                    <div class="mb-3 text-warning fs-1">
+                    <div class="dashboard-icon text-warning">
                         <i class="bi bi-inbox"></i>
                     </div>
-                    <h5 class="card-title">Manage Requests</h5>
-                    <p class="card-text text-muted">
-                        Accept or reject skill requests
+                    <h5 class="fw-semibold">Manage Requests</h5>
+                    <p class="text-muted small">
+                        Accept, reject, and complete requests
                     </p>
-                    <a href="requests/manage.php" class="btn btn-warning btn-sm">
-                        Go
+                    <a href="requests/manage.php" class="btn btn-warning btn-sm px-4 text-white">
+                        Manage
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- My Requests -->
+        <!-- MY REQUESTS -->
         <div class="col-md-3">
-            <div class="card h-100 shadow-sm text-center border-0">
+            <div class="card dashboard-card h-100 text-center border-0">
                 <div class="card-body">
-                    <div class="mb-3 text-info fs-1">
+                    <div class="dashboard-icon text-info">
                         <i class="bi bi-person-check"></i>
                     </div>
-                    <h5 class="card-title">My Requests</h5>
-                    <p class="card-text text-muted">
-                        Track skills you requested to learn
+                    <h5 class="fw-semibold">My Requests</h5>
+                    <p class="text-muted small">
+                        Track skills you are learning
                     </p>
-                    <a href="requests/my_requests.php" class="btn btn-info btn-sm text-white">
-                        View
+                    <a href="requests/my_requests.php" class="btn btn-info btn-sm px-4 text-white">
+                        View Requests
                     </a>
                 </div>
             </div>
@@ -103,7 +128,7 @@ include('includes/navbar.php');
 
 <!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
